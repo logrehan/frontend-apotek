@@ -3,85 +3,56 @@
 import {
   FaHome,
   FaPills,
-  FaLayerGroup,
-  FaCashRegister,
-  FaChartBar,
-  FaUsers,
-  FaTruck,
+  FaSignOutAlt,
 } from "react-icons/fa";
 
-import { Link, useLocation } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+} from "react-router-dom";
+
+import { logout } from "../utils/auth";
 
 export default function Sidebar() {
   const location = useLocation();
 
   const menus = [
     {
-      section: "MAIN",
-      items: [
-        {
-          name: "Dashboard",
-          path: "/",
-          icon: <FaHome />,
-        },
-        {
-          name: "Data Obat",
-          path: "/obat",
-          icon: <FaPills />,
-        },
-        {
-          name: "Jenis Obat",
-          path: "/jenis-obat",
-          icon: <FaLayerGroup />,
-        },
-      ],
+      name: "Dashboard",
+      path: "/dashboard",
+      icon: <FaHome />,
     },
 
     {
-      section: "MANAGEMENT",
-      items: [
-        {
-          name: "Distributor",
-          path: "/distributor",
-          icon: <FaTruck />,
-        },
-        {
-          name: "Users",
-          path: "/users",
-          icon: <FaUsers />,
-        },
-      ],
-    },
-
-    {
-      section: "TRANSACTION",
-      items: [
-        {
-          name: "Kasir",
-          path: "/kasir",
-          icon: <FaCashRegister />,
-        },
-        {
-          name: "Laporan",
-          path: "/laporan",
-          icon: <FaChartBar />,
-        },
-      ],
+      name: "Data Obat",
+      path: "/obat",
+      icon: <FaPills />,
     },
   ];
 
   return (
     <aside
       className="
-        fixed left-0 top-0
-        w-[180px] h-screen
-        bg-[#0f5cc0]
+        fixed
+        left-0
+        top-0
+        w-[180px]
+        h-screen
+        bg-emerald-600
         text-white
-        flex flex-col
+        flex
+        flex-col
       "
     >
       {/* LOGO */}
-      <div className="px-4 py-3 border-b border-blue-400">
+      <div
+        className="
+          px-4
+          py-4
+          border-b
+          border-emerald-400
+        "
+      >
         <h1 className="text-sm font-semibold">
           Apotek Point
         </h1>
@@ -89,66 +60,83 @@ export default function Sidebar() {
 
       {/* MENU */}
       <div className="flex flex-col py-2">
-        {menus.map((group) => (
-          <div key={group.section} className="mb-3">
-            {/* SECTION */}
-            <p
-              className="
-                px-4 mb-1
-                text-[9px]
-                tracking-widest
-                text-blue-200
-              "
+        {menus.map((menu) => {
+          const active =
+            location.pathname ===
+            menu.path;
+
+          return (
+            <Link
+              key={menu.path}
+              to={menu.path}
+              className={`
+                flex
+                items-center
+                gap-3
+                px-4
+                py-2.5
+                text-[12px]
+                transition-all
+                duration-200
+                border-l-4
+                ${
+                  active
+                    ? `
+                      bg-emerald-700
+                      border-white
+                    `
+                    : `
+                      border-transparent
+                      hover:bg-emerald-700
+                      hover:translate-x-1
+                    `
+                }
+              `}
             >
-              {group.section}
-            </p>
+              <span className="text-xs">
+                {menu.icon}
+              </span>
 
-            {/* ITEMS */}
-            {group.items.map((menu) => {
-              const active =
-                location.pathname === menu.path;
-
-              return (
-                <Link
-                  key={menu.path}
-                  to={menu.path}
-                  className={`
-                    flex items-center gap-3
-                    px-4 py-2.5
-                    text-[12px]
-                    transition-all duration-200
-                    border-l-4
-                    ${
-                      active
-                        ? `
-                          bg-blue-700
-                          border-white
-                        `
-                        : `
-                          border-transparent
-                          hover:bg-blue-700
-                          hover:translate-x-1
-                        `
-                    }
-                  `}
-                >
-                  <span className="text-xs">
-                    {menu.icon}
-                  </span>
-
-                  <span>{menu.name}</span>
-                </Link>
-              );
-            })}
-          </div>
-        ))}
+              <span>{menu.name}</span>
+            </Link>
+          );
+        })}
       </div>
 
       {/* FOOTER */}
-      <div className="mt-auto px-4 py-3 border-t border-blue-400">
-        <p className="text-[10px] text-blue-200">
-          Apotek System v1.0
-        </p>
+      <div
+        className="
+          mt-auto
+          border-t
+          border-emerald-400
+        "
+      >
+        {/* LOGOUT */}
+        <button
+          onClick={logout}
+          className="
+            w-full
+            flex
+            items-center
+            gap-3
+            px-4
+            py-3
+            text-[12px]
+            hover:bg-emerald-700
+            transition-all
+          "
+        >
+          <FaSignOutAlt />
+
+          <span>Logout</span>
+        </button>
+
+        {/* VERSION */}
+        <div className="px-4 pb-3">
+          <p className="text-[10px] text-emerald-200">
+            Apotek System v1.0
+          </p>
+        </div>
       </div>
     </aside>
   );
